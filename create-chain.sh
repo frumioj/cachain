@@ -38,6 +38,7 @@ while read -ep "Path for INTERMEDIATE CA [${PWD}/interca]:" intercadir </dev/tty
 	mkdir -p "${intercadir}/certs"
 	mkdir -p "${intercadir}/crl"
 	mkdir -p "${intercadir}/newcerts"
+	mkdir -p "${intercadir}/csr"
 	mkdir -p "${intercadir}/private"
 	chmod 700 "${intercadir}/private"
 	touch "${intercadir}/index.txt"
