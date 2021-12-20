@@ -1,5 +1,4 @@
-# OpenSSL root CA configuration file.
-# Copy to `/root/ca/openssl.cnf`.
+# OpenSSL root CA configuration file template.
 
 [ ca ]
 # `man ca`
@@ -7,24 +6,22 @@ default_ca = CA_default
 
 [ CA_default ]
 # Directory and file locations
-## TODO - change the value of dir to match
-## where the file is placed by the script
+# ${rootcadir} is replaced by the script using this template
 
-dir               = ${rootcadir}
-certs             = $dir/certs
-crl_dir           = $dir/crl
-new_certs_dir     = $dir/newcerts
-database          = $dir/index.txt
-serial            = $dir/serial
-RANDFILE          = $dir/private/.rand
+certs             = ${rootcadir}/certs
+crl_dir           = ${rootcadir}/crl
+new_certs_dir     = ${rootcadir}/newcerts
+database          = ${rootcadir}/index.txt
+serial            = ${rootcadir}/serial
+RANDFILE          = ${rootcadir}/private/.rand
 
 # The root key and root certificate.
-private_key       = $dir/private/ca.key.pem
-certificate       = $dir/certs/ca.cert.pem
+private_key       = ${rootcadir}/private/ca.key.pem
+certificate       = ${rootcadir}/certs/ca.cert.pem
 
 # For certificate revocation lists.
-crlnumber         = $dir/crlnumber
-crl               = $dir/crl/ca.crl.pem
+crlnumber         = ${rootcadir}/crlnumber
+crl               = ${rootcadir}/crl/ca.crl.pem
 crl_extensions    = crl_ext
 default_crl_days  = 30
 
