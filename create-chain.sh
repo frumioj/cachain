@@ -42,16 +42,29 @@ while read -ep "Path for INTERMEDIATE CA [${PWD}/interca]:" intercadir </dev/tty
 	chmod 700 "${intercadir}/private"
 	touch "${intercadir}/index.txt"
 	echo 1000 > "${intercadir}/serial"
+	echo 1000 > "${intercadir}/crlnumber"
+	
 	# substitute the $intercadir value into the template file
 	envsubst < inter_openssl.cnf > ${intercadir}/openssl.cnf
+
 	echo "Generating a 4096 bit RSA key for CA"
 	openssl genrsa -aes256 -out "${intercadir}/private/ca.key.pem" 4096
-
+	chmod 400 "${intercadir}/private/ca.key.pem"
+	
 	# sign a cert with the ROOT key
-	openssl req -config ${rootcadir}/openssl.cnf \
+	openssl req -config ${intercadir}/openssl.cnf \
 		-key ${intercadir}/private/ca.key.pem \
-		-new -x509 -days 7300 -sha256 -extensions v3_ca \
-		-out ${intercadir}/certs/ca.cert.pem
+		-new -sha256 \
+		-out ${intercadir}/csr/intermediate.csr.pem
+
+	openssl ca -config ${rootcadir}/openssl.cnf \
+		-extensions v3_intermediate_ca \
+		-days 3650 -notext -md sha256 \
+		-in "${intercadir}/csr/intermediate.csr.pem" \
+		-out "${intercadir}/certs/intermediate.cert.pem"
+
+	chmod 444 "${intercadir}/certs/intermediate.cert.pem"
+	
         break
     fi 
 done
